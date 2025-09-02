@@ -11,21 +11,28 @@ USE PlataformaGestaoFinanceira;
 GO
 
 -- Usuarios e Controle de Acesso
-CREATE TABLE ContaLogin(
+CREATE TABLE TipoConta(
+	Id TINYINT IDENTITY NOT NULL,
+	Nome VARCHAR(20) NOT NULL,
+
+	CONSTRAINT PK_TipoConta PRIMARY KEY (Id)
+);
+
+CREATE TABLE Conta(
 	Id INTEGER IDENTITY NOT NULL,
 	Email VARCHAR(150) NOT NULL,
 	Senha VARCHAR(150) NOT NULL,
-	DataRegistro DATETIME NOT NULL,
+	DataRegistro DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	DataUltimaAlteracao DATETIME NOT NULL,
 
-	CONSTRAINT PK_ContaLogin PRIMARY KEY (Id),
-	CONSTRAINT UQ_ContaLogin_Email UNIQUE (Email)
+	CONSTRAINT PK_Conta PRIMARY KEY (Id),
+	CONSTRAINT UQ_Conta_Email UNIQUE (Email)
 );
 GO
 
 CREATE TABLE PermissaoAcesso(
 	Id TINYINT IDENTITY NOT NULL,
-	Nome VARCHAR(50) NOT NULL,
+	Nome VARCHAR(20) NOT NULL,
 	Descricao VARCHAR(500) NOT NULL,
 
 	CONSTRAINT PK_PermissaoAcesso PRIMARY KEY (Id)
@@ -35,14 +42,14 @@ GO
 CREATE TABLE Usuario(
 	Id INTEGER IDENTITY NOT NULL,
 	NomeCompleto VARCHAR(100) NOT NULL,
-	DataCriacao DATETIME NOT NULL,
-	DataAtualizacao DATETIME NOT NULL,
-	IdContaLogin INTEGER NOT NULL,
+	DataRegistro DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	DataUltimaAlteracao DATETIME NOT NULL,
+	IdConta INTEGER NOT NULL,
 	IdPermissaoAcesso TINYINT NOT NULL,
 
 	CONSTRAINT PK_Usuario PRIMARY KEY (Id),
-	CONSTRAINT PK_Usuario_ContaLogin FOREIGN KEY (IdContaLogin) REFERENCES ContaLogin (Id),
-	CONSTRAINT PK_Usuario_PermissaoAcesso FOREIGN KEY (IdPermissaoAcesso) REFERENCES PermissaoAcesso (Id)
+	CONSTRAINT FK_Usuario_Conta FOREIGN KEY (IdConta) REFERENCES Conta (Id),
+	CONSTRAINT FK_Usuario_PermissaoAcesso FOREIGN KEY (IdPermissaoAcesso) REFERENCES PermissaoAcesso (Id)
 );
 GO
 
