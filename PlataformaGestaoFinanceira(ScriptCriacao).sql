@@ -153,25 +153,17 @@ CREATE TABLE UsuarioContaFinanceira(
 );
 GO
 
-CREATE TABLE TipoTransacao(
+CREATE TABLE TipoLancamento(
 	Id TINYINT IDENTITY NOT NULL,
-	Nome VARCHAR(50) NOT NULL,
+	Nome VARCHAR(20) NOT NULL,
 
-	CONSTRAINT PK_TipoTransacao PRIMARY KEY (Id)
-);
-GO
-
-CREATE TABLE StatusTransacao(
-	Id TINYINT IDENTITY NOT NULL,
-	Nome VARCHAR(50) NOT NULL,
-
-	CONSTRAINT PK_StatusTransacao PRIMARY KEY (Id)
+	CONSTRAINT PK_TipoLancamento PRIMARY KEY (Id)
 );
 GO
 
 CREATE TABLE TipoCategoria(
 	Id TINYINT IDENTITY NOT NULL,
-	Nome VARCHAR(50) NOT NULL
+	Nome VARCHAR(20) NOT NULL
 
 	CONSTRAINT PK_TipoCategoria PRIMARY KEY (Id)
 );
@@ -189,23 +181,21 @@ CREATE TABLE Categoria(
 );
 GO
 
-CREATE TABLE Transacao(
+CREATE TABLE Lancamento(
 	Id INTEGER IDENTITY NOT NULL,
 	Descricao VARCHAR(500) NULL,
 	Valor DECIMAL(15,2) NOT NULL,
-	DataTransacao DATETIME NOT NULL,
+	DataLancamento DATETIME NOT NULL,
 	IdContaFinanceira INTEGER NOT NULL,
 	IdUsuario INTEGER NOT NULL,
 	IdCategoria INTEGER NOT NULL,
-	IdTipoTransacao TINYINT NOT NULL,
-	IdStatusTransacao TINYINT NOT NULL,
+	IdTipoLancamento TINYINT NOT NULL,
 
-	CONSTRAINT PK_Transacao PRIMARY KEY (Id),
-	CONSTRAINT FK_Transacao_ContaFinanceira FOREIGN KEY (IdContaFinanceira) REFERENCES ContaFinanceira (Id),
-	CONSTRAINT FK_Transacao_Usuario FOREIGN KEY (IdUsuario) REFERENCES Usuario (Id),
-	CONSTRAINT FK_Transacao_Categoria FOREIGN KEY (IdCategoria) REFERENCES Categoria (Id),
-	CONSTRAINT FK_Transacao_TipoTransacao FOREIGN KEY (IdTipoTransacao) REFERENCES TipoTransacao (Id),
-	CONSTRAINT FK_Transacao_StatusTransacao FOREIGN KEY (IdStatusTransacao) REFERENCES StatusTransacao (Id)
+	CONSTRAINT PK_Lancamento PRIMARY KEY (Id),
+	CONSTRAINT FK_Lancamento_ContaFinanceira FOREIGN KEY (IdContaFinanceira) REFERENCES ContaFinanceira (Id),
+	CONSTRAINT FK_Lancamento_Usuario FOREIGN KEY (IdUsuario) REFERENCES Usuario (Id),
+	CONSTRAINT FK_Lancamento_Categoria FOREIGN KEY (IdCategoria) REFERENCES Categoria (Id),
+	CONSTRAINT FK_Lancamento_TipoLancamento FOREIGN KEY (IdTipoLancamento) REFERENCES TipoLancamento (Id)
 );
 GO
 
