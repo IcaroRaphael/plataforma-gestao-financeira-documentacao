@@ -34,8 +34,8 @@ GO
 
 CREATE TABLE PerfilAcesso(
 	Id TINYINT IDENTITY NOT NULL,
-	Nome VARCHAR(50) NOT NULL,
-	Descricao VARCHAR(500) NOT NULL,
+	Nome VARCHAR(20) NOT NULL,
+	Descricao VARCHAR(300) NOT NULL,
 
 	CONSTRAINT PK_PermissaoAcesso PRIMARY KEY (Id)
 );
@@ -58,14 +58,14 @@ GO
 -- Investimentos
 CREATE TABLE StatusInvestimento(
 	Id TINYINT IDENTITY NOT NULL,
-	Nome VARCHAR(50) NOT NULL,
+	Nome VARCHAR(20) NOT NULL,
 
 	CONSTRAINT PK_StatusInvestimento PRIMARY KEY (Id)
 );
 GO
 
 CREATE TABLE TipoInvestimento(
-	Id TINYINT IDENTITY NOT NULL,
+	Id SMALLINT IDENTITY NOT NULL,
 	Nome VARCHAR(50),
 
 	CONSTRAINT PK_TipoInvestimento PRIMARY KEY (Id)
@@ -75,10 +75,10 @@ GO
 CREATE TABLE Investimento(
 	Id INTEGER IDENTITY NOT NULL,
 	Nome VARCHAR(100) NOT NULL,
-	Descricao VARCHAR(500) NULL,
-	ValorAtual DECIMAL(15,2) NOT NULL,
+	Descricao VARCHAR(300) NULL,
+	ValorInicial DECIMAL(15,2) NOT NULL,
 	DataInvestimento DATE NOT NULL,
-	IdTipoInvestimento TINYINT NOT NULL,
+	IdTipoInvestimento SMALLINT NOT NULL,
 	IdStatusInvestimento TINYINT NOT NULL,
 	IdUsuario INTEGER NOT NULL,
 
@@ -88,6 +88,24 @@ CREATE TABLE Investimento(
 	CONSTRAINT FK_Investimento_Usuario FOREIGN KEY (IdUsuario) REFERENCES Usuario (Id)
 );
 GO
+
+CREATE TABLE TipoProvento(
+	Id SMALLINT IDENTITY NOT NULL,
+	Nome VARCHAR(50)
+);
+GO
+
+CREATE TABLE Provento(
+	Id INTEGER IDENTITY NOT NULL,
+	DataProvento DATE NOT NULL,
+	Valor DECIMAL(15,2) NOT NULL,
+	IdInvestimento INTEGER NOT NULL,
+	IdTipoProvento SMALLINT NOT NULL,
+
+	CONSTRAINT PK_Provento PRIMARY KEY (Id),
+	CONSTRAINT FK_Provento_Investimento FOREIGN KEY (IdInvestimento) REFERENCES Investimento (Id),
+	CONSTRAINT FK_Provento_TipoProvento FOREIGN KEY (IdTipoProvento) REFERENCES TipoInvestimento (Id)
+);
 
 CREATE TABLE HistoricoInvestimento(
 	Id INTEGER IDENTITY NOT NULL,
@@ -119,7 +137,7 @@ GO
 
 CREATE TABLE StatusContaFinanceira(
 	Id TINYINT IDENTITY NOT NULL,
-	Nome VARCHAR(50) NOT NULL,
+	Nome VARCHAR(20) NOT NULL,
 
 	CONSTRAINT PK_StatusContaFinanceira PRIMARY KEY (Id)
 );
@@ -128,7 +146,7 @@ GO
 CREATE TABLE ContaFinanceira(
 	Id INTEGER IDENTITY NOT NULL,
 	Nome VARCHAR(100) NOT NULL,
-	Descricao VARCHAR(500) NULL,
+	Descricao VARCHAR(300) NULL,
 	SaldoInicial DECIMAL(15,2) NOT NULL,
 	SaldoAtual DECIMAL(15,2) NOT NULL,
 	LimiteCredito DECIMAL(15,2) NULL,
@@ -185,7 +203,7 @@ GO
 
 CREATE TABLE Lancamento(
 	Id INTEGER IDENTITY NOT NULL,
-	Descricao VARCHAR(500) NULL,
+	Descricao VARCHAR(300) NULL,
 	Valor DECIMAL(15,2) NOT NULL,
 	DataLancamento DATETIME NOT NULL,
 	IdContaFinanceira INTEGER NOT NULL,
@@ -204,7 +222,7 @@ GO
 -- Orçamento e Metas
 CREATE TABLE StatusMetaFinanceira(
 	Id TINYINT IDENTITY NOT NULL,
-	Nome VARCHAR(50) NOT NULL,
+	Nome VARCHAR(20) NOT NULL,
 
 	CONSTRAINT PK_StatusMetaFinanceira PRIMARY KEY (Id)
 );
@@ -213,7 +231,7 @@ GO
 CREATE TABLE MetaFinanceira(
 	Id INTEGER IDENTITY NOT NULL,
 	Nome VARCHAR(100) NOT NULL,
-	Descricao VARCHAR(500) NULL,
+	Descricao VARCHAR(300) NULL,
 	ValorAlvo DECIMAL(15,2) NOT NULL,
 	ValorAtual DECIMAL(15,2) NOT NULL,
 	DataAlvo DATE NULL,
@@ -237,7 +255,7 @@ GO
 CREATE TABLE OrcamentoFinanceiro(
 	Id INTEGER IDENTITY NOT NULL,
 	Nome VARCHAR(100) NOT NULL,
-	Descricao VARCHAR(500) NULL,
+	Descricao VARCHAR(300) NULL,
 	ValorEstimado DECIMAL(15,2) NOT NULL,
 	ValorGasto DECIMAL(15,2) NULL,
 	Mes TINYINT NULL,
@@ -245,7 +263,7 @@ CREATE TABLE OrcamentoFinanceiro(
 	IdCategoria INTEGER NOT NULL,
 
 	CONSTRAINT PK_OrcamentoFinanceiro PRIMARY KEY (Id),
-	CONSTRAINT FK_OrcamentoFinanceiro FOREIGN KEY (IdCategoria) REFERENCES Categoria (Id)
+	CONSTRAINT FK_OrcamentoFinanceiro_Categoria FOREIGN KEY (IdCategoria) REFERENCES Categoria (Id)
 );
 GO
 
